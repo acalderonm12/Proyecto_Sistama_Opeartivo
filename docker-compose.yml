@@ -1,0 +1,44 @@
+version: '3.8'
+
+services:
+  nginx:
+    image: nginx:latest
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - web1
+      - web2
+
+  web1:
+    build: ./app
+    environment:
+      - DB_HOST=db
+      - POSTGRES_DB=proyecto_sistemas_operativos_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+    depends_on:
+      - db
+
+  web2:
+    build: ./app
+    environment:
+      - DB_HOST=db
+      - POSTGRES_DB=proyecto_sistemas_operativos_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+    depends_on:
+      - db
+
+  db:
+    image: postgres:15-alpine
+    environment:
+      - POSTGRES_DB=proyecto_sistemas_operativos_db
+      - POSTGRES_USER=admin
+      - POSTGRES_PASSWORD=admin123
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+volumes:
+  postgres_data:

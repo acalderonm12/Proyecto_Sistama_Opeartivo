@@ -1,0 +1,78 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row">
+    <div class="col-md-4">
+        <div class="card shadow mb-4">
+            <div class="card-header bg-dark text-white">
+                <h5>Crear Nuevo Artículo</h5>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('crear_articulo') }}" method="POST">
+                    <div class="mb-3">
+                        <label>Título</label>
+                        <input type="text" name="titulo" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Contenido</label>
+                        <textarea name="contenido" class="form-control" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Guardar Artículo</button>
+                </form>
+            </div>
+        </div>
+        <div class="alert alert-info shadow">
+            <small>Atendido por el contenedor Flask ID: <strong>{{ hostname }}</strong></small>
+        </div>
+    </div>
+
+    <div class="col-md-8">
+        <h3>Mis Artículos</h3>
+        {% if articulos %}
+            {% for art in articulos %}
+            <div class="card mb-3 shadow-sm">
+                <div class="card-body">
+                    <h5 class="card-title">{{ art.titulo }}</h5>
+                    <p class="card-text">{{ art.contenido }}</p>
+                    
+                    <button class="btn btn-sm btn-warning" data-bs-toggle="modal" data-bs-target="#editModal{{ art.id }}">Editar</button>
+                    
+                    <form action="{{ url_for('eliminar_articulo', id=art.id) }}" method="POST" class="d-inline">
+                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('¿Eliminar este artículo?')">Eliminar</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal de Edición -->
+            <div class="modal fade" id="editModal{{ art.id }}" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <form action="{{ url_for('editar_articulo', id=art.id) }}" method="POST">
+                            <div class="modal-header">
+                                <h5 class="modal-title">Editar Artículo</h5>
+                                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                            </div>
+                            <div class="modal-body">
+                                <div class="mb-3">
+                                    <label>Título</label>
+                                    <input type="text" name="titulo" value="{{ art.titulo }}" class="form-control" required>
+                                </div>
+                                <div class="mb-3">
+                                    <label>Contenido</label>
+                                    <textarea name="contenido" class="form-control" rows="4" required>{{ art.contenido }}</textarea>
+                                </div>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                                <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        {% else %}
+            <p class="text-muted">No has publicado ningún artículo aún.</p>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

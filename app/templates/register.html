@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-4">
+        <div class="card shadow">
+            <div class="card-header bg-success text-white text-center">
+                <h4>Registro de Usuario</h4>
+            </div>
+            <div class="card-body">
+                <form action="{{ url_for('register') }}" method="POST">
+                    <div class="mb-3">
+                        <label>Usuario</label>
+                        <input type="text" name="username" class="form-control" required>
+                    </div>
+                    <div class="mb-3">
+                        <label>Contraseña</label>
+                        <input type="password" name="password" class="form-control" required>
+                    </div>
+                    <button type="submit" class="btn btn-success w-100">Registrarse</button>
+                </form>
+            </div>
+            <div class="card-footer text-center">
+                <small>¿Ya tienes cuenta? <a href="{{ url_for('login') }}">Inicia sesión</a></small>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
